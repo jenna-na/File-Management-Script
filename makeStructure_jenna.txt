@@ -1,0 +1,31 @@
+import getpass
+import testSystem
+import os
+my_user_name=(getpass.getuser())
+my_home= testSystem.switch_system()[1]
+
+parent_dir = os.path.join(my_home,my_user_name, "Python_Data", "filesToSort")
+
+for files in os.listdir(parent_dir):
+    if files.startswith("ff_"):
+        file_path= os.path.join(parent_dir, files)
+        with open(file_path, "r") as f: 
+            first_line= f.readline().strip()
+        if "-" in first_line:
+            year, month, day=first_line.split("-")
+            try: 
+                year_folder= os.path.join(parent_dir, year)
+                os.mkdir(year_folder)
+            except FileExistsError:
+                pass
+            try:
+                month_folder= os.path.join(parent_dir, year, month)
+                os.mkdir(month_folder)
+            except FileExistsError:
+                pass
+            try:
+                day_folder= os.path.join(parent_dir, year, month, day)
+                os.mkdir(day_folder)
+            except FileExistsError: 
+                pass
+            os.rename(os.path.join(parent_dir, files), os.path.join(parent_dir, year, month, day, files))
